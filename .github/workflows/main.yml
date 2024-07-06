@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: 16
       - name: Install pnpm
-        run: npm install pnpm -g
+        run: npm install pnpm@8 -g
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Build
