@@ -5,6 +5,9 @@
     <span>语言：</span>
     <input type="text" v-model="language">
     <button @click="diffFile">比对</button>
+    <span>文件名：</span>
+    <input type="text" v-model="fileName">
+    <button @click="download">下载</button>
   </div>
   <div style="width: calc(100vw - 20px); height: calc(100vh - 40px);" ref="monacoRef"></div>
 </template>
@@ -20,6 +23,7 @@ let original = '() => {}'
 let modified = '() => { console.log(123)}'
 
 const language = ref('javascript')
+const fileName = ref('')
 
 const file1Change = (e: any) => {
   const file = e.target.files[0] // 获取上传的文件
@@ -38,6 +42,8 @@ const file1Change = (e: any) => {
 
 const file2Change = (e: any) => {
   const file = e.target.files[0] // 获取上传的文件
+  console.log(file)
+  fileName.value = file.name
   if (file) {
     const reader = new FileReader()
     
@@ -48,6 +54,22 @@ const file2Change = (e: any) => {
     reader.readAsText(file) // 以文本格式读取文件
   } else {
     console.log('未选择文件')
+  }
+}
+
+const download = () => {
+  const value = editor.value?.getModel()?.modified.getValue() || ''
+  const blob = new Blob([value])
+
+  const elink = document.createElement('a')
+  if ('download' in elink) {
+    elink.download = fileName.value
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob as Blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    elink.remove()
   }
 }
 
@@ -72,5 +94,8 @@ onMounted(() => {
 * {
   margin: 0;
   padding: 0;
+}
+button {
+  margin-right: 10px;
 }
 </style>
