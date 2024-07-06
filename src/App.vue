@@ -61,7 +61,7 @@ const diffFile = () => {
 onMounted(() => {
   editor.value = monaco.editor.createDiffEditor(monacoRef.value!, {
     theme: 'vs-dark',
-    readOnly: true,
+    // readOnly: true,
   }, {})
 
   diffFile()
